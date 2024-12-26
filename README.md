@@ -2,6 +2,10 @@
 Hilfe um alle Pakete die standartmäsig benutzt werden zu installieren nach der Installation von Arch
 
 
+## Schritt 0
+```
+sudo pacman -S unzip
+```
 
 ## Schritt 1
 ```

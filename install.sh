@@ -7,14 +7,14 @@ source includes/helper.sh
 
 source includes/greeting.sh
 
-# Menü anzeigen
+# Pakete die für die Installation benötigt werden werden vorinstalliert
 echo -e "${gelb}Es werden alle erforderlichen Pakete vorinstalliert!${reset}"
 for paket in "${!pakete_pre[@]}"; do
   echo -e "${lila}🔍 Überprüfe: $paket - ${pakete_pre[$paket]}${reset}"
   installiere_paket "$paket"
 done
 
-selected=$(printf "%s\n" "${options[@]}" | gum choose --no-limit)
+selected=$(printf "%s\n" "${options[@]}" | gum choose)
 
 # Ergebnisse anzeigen
 echo "Du hast folgende Optionen gewählt:"
@@ -47,17 +47,27 @@ if gum confirm "Bist du sicher?"; then
       "Installieren wenn nicht installiert")
         echo "Überprüfung und Installation von Paketen:"
         for paket in "${!pakete[@]}"; do
-          echo -e "${lila}🔍 Überprüfe: $paket - ${pakete[$paket]}${reset}"
+          echo -e "${lila}🔍 Überprüfe: ${cyan}$paket - ${pakete[$paket]}${reset}"
           installiere_paket "$paket"
         done
+        echo -e "${lila}🔍 Überprüfe: ${cyan}yay - Yet Another Yogurt - An AUR Helper Written in Go"
         install_yay
         for paket in "${!pakete_yay[@]}"; do
-          echo -e "${lila}🔍 Überprüfe: $paket - ${pakete_yay[$paket]}${reset}"
+          echo -e "${lila}🔍 Überprüfe: ${cyan}$paket - ${pakete_yay[$paket]}${reset}"
           installiere_paket_yay "$paket"
         done
       ;;
       "Info ueber die zu installirenden Pakete")
-        paket_infos
+        echo -e "${gelb}Pakete und Beschreibung:"
+        for paket in "${!pakete_pre[@]}"; do 
+          paket_infos "$paket" "${pakete_pre[$paket]}"
+        done 
+        for paket in "${!pakete[@]}"; do 
+          paket_infos "$paket" "${pakete[$paket]}"
+        done
+      ;;
+      "Test")
+        verzeichnisse_erstellen
       ;;
       "Beenden")
         echo "Programm beendet."

@@ -48,28 +48,21 @@ deinstalliere_pakete() {
   fi
 }
 
-paket_infos() {
-    echo "Pakete und Beschreibung:"
-    for paket in "${!pakete[@]}"; do
-        if pacman -Q "$paket" &>/dev/null; then
-            echo -e "${gruen}✔ $paket: ${pakete[$paket]}"
-        else
-            echo -e "${rot}✘ $paket: ${pakete[$paket]}"
-        fi
-    done
-    for paket in "${!pakete_pre[@]}"; do
-        if pacman -Q "$paket" &>/dev/null; then
-            echo -e "${gruen}✔ $paket: ${pakete_pre[$paket]}"
-        else
-            echo -e "${rot}✘ $paket: ${pakete_pre[$paket]}"
-        fi
-    done
-}
+paket_infos() { 
+  local paket=$1 
+  local beschreibung=$2 
+  
+  if pacman -Q "$paket" &>/dev/null; then 
+    echo -e "${gruen}✔ $paket - ${beschreibung[$paket]}${reset}" 
+    else 
+    echo -e "${rot}✘ $paket - ${beschreibung[$paket]}${reset}" 
+    fi 
+  }
 
 install_yay() {
-    # Überprüfen, ob yay bereits installiert ist
+# Überprüfen, ob yay bereits installiert ist
   if ! command -v yay &>/dev/null; then
-    echo "yay ist nicht installiert. Starte Installation..."
+    echo -e "${rot}✘ yay ist nicht installiert. Starte Installation...${reset}"
 
     # Notwendige Abhängigkeiten installieren (wenn sie noch nicht vorhanden sind)
     sudo pacman -Sy --needed --noconfirm base-devel git
@@ -80,70 +73,35 @@ install_yay() {
     cd yay
     makepkg -si --noconfirm
 
-    echo "yay wurde erfolgreich installiert."
+    echo -e "${gruen}✔ yay wurde erfolgreich installiert.${reset}"
 else
-    echo "yay ist bereits installiert."
+    echo -e "${gruen}✔ yay ist bereits installiert.${reset}"
 fi
 }
 
-# Überprüfen, ob jedes Paket installiert ist
-erstelle_nicht_installiert() {
-  if [ ${#nicht_installierte_pakete[@]} -eq 1 ]; then
-    nicht_installierte_pakete=()
-  fi 
-
-  for paket in "${programmliste[@]}"; do
-      if ! pacman -Q "$paket" &>/dev/null; then
-        # Paket ist nicht installiert, also zur Liste hinzufügen
-        nicht_installierte_pakete+=("$paket")
-      fi
+# Erstelle grundverzeichniss wenn sie nicht bereits existieren
+verzeichnisse_erstellen(){
+  echo -e "${gelb}Erstellen von nicht vorhandenen Verzeichnissen:${reset}"
+  for verzeichnis in "${!verzeichnisse[@]}"; do
+    if [ -d ~/"$verzeichnis" ]; then
+      echo -e "${gruen}✔ - Verzeichnis $verzeichnis existiert bereits.${reset}"
+    else
+      echo -e "${rot}✘ - Verzeichnis $verzeichnis existiert nicht und wird jetzt erstellt.${reset}"
+      mkdir ~/"$verzeichnis"
+      echo -e "${gruen}✔ - Verzeichnis $verzeichnis wurde erstellt.${reset}"
+    fi
   done
 }
 
-# Ausgabe der nicht installierten Pakete
-nicht_installiert_ausgeben() {
-  if [ ${#nicht_installierte_pakete[@]} -gt 0 ]; then
-      echo "Nicht installierte Pakete:"
-      for paket in "${nicht_installierte_pakete[@]}"; do
-          echo "- $paket"
-      done
-  else
-      echo "Alle Pakete sind bereits installiert."
-  fi
-}
-
-# Funktion zur Anzeige des Menüs
-zeige_menue() {
-    echo "Bitte wählen Sie eine oder mehrere Optionen:"
-    for i in "${!nicht_installierte_pakete[@]}"; do
-        echo "$((i+1))) ${nicht_installierte_pakete[i]}"
-    done
-    echo "Drücken Sie Enter, wenn Sie fertig sind."
-}
-
-# Hauptlogik
-programm_auswahl(){
-  while true; do
-      zeige_menue
-
-      # Eingabe lesen
-      read -p "Ihre Wahl (z.B. 1 3): " -a eingaben
-
-      # Verarbeite Eingaben
-      for auswahl in "${eingaben[@]}"; do
-          if [[ "$auswahl" =~ ^[0-9]+$ ]] && ((auswahl >= 1 && auswahl <= ${#nicht_installierte_pakete[@]})); then
-              if [[ "${nicht_installierte_pakete[auswahl-1]}" == "Beenden" ]]; then
-                  echo "Programm beendet."
-                  exit 0
-              fi
-              ausgewaehlt+=("${nicht_installierte_pakete[auswahl-1]}")
-          else
-              echo "Ungültige Eingabe: $auswahl"
-          fi
-      done
-
-      # Zeige die ausgewählten Optionen an
-      echo "Ausgewählt: ${ausgewaehlt[*]}"
-      ausgewaehlt=() # Reset für nächste Runde
+# Dienste aktivieren und starten
+dienste_starten(){
+  for service in "${!services[@]}"; do 
+    echo "Aktiviere ${services[$service]} ($service)" 
+    sudo systemctl enable "$service" 
+  
+    echo "Starte ${services[$service]} ($service)" 
+    sudo systemctl start "$service" 
+  
+    echo "${services[$service]} ($service) ist aktiviert und gestartet."
   done
 }
