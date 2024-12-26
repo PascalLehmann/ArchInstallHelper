@@ -2,12 +2,10 @@
 
 # Menüoptionen
 options=(
-    "Deinstallieren"
-    "Ist installiert"
+    "Deinstallieren von nicht genutzten Paketen"
+    "Was ist bereits installiert"
     "Installieren wenn nicht installiert"
-    "Info"
-    "yay Install"
-    "Check"
+    "Info ueber die zu installirenden Pakete"
     )
  
  

@@ -26,16 +26,13 @@ if gum confirm "Bist du sicher?"; then
     echo "Bearbeite: $select"
 
     case "$select" in
-      "Deinstallieren")
+      "Deinstallieren von nicht genutzten Paketen")
         echo -e "${gelb}Deinstalliere nicht benötigte Programme"
         for paket in "${!pakete_deinstall[@]}"; do
           deinstalliere_pakete "$paket"
         done
       ;;
-      "yay Install")
-        install_yay
-      ;;
-      "Ist installiert")
+      "Was ist bereits installiert")
         echo -e "${gelb}Überprüfung der Programme:${reset}"
         for paket in "${pakete[@]}"; do
           check_pakete "$paket"
@@ -44,17 +41,17 @@ if gum confirm "Bist du sicher?"; then
       "Installieren wenn nicht installiert")
         echo "Überprüfung und Installation von Paketen:"
         for paket in "${!pakete[@]}"; do
-          echo -e "${lila}🔍 Überprüfe: $paket - ${pakete_pre[$paket]}${reset}"
+          echo -e "${lila}🔍 Überprüfe: $paket - ${pakete[$paket]}${reset}"
+          installiere_paket "$paket"
+        done
+        install_yay
+        for paket in "${!pakete_yay[@]}"; do
+          echo -e "${lila}🔍 Überprüfe: $paket - ${pakete_yay[$paket]}${reset}"
           installiere_paket "$paket"
         done
       ;;
-      "Info")
+      "Info ueber die zu installirenden Pakete")
         paket_infos
-      ;;
-      "Check")
-        erstelle_nicht_installiert
-        nicht_installiert_ausgeben
-        programm_auswahl
       ;;
       "Beenden")
         echo "Programm beendet."
