@@ -21,6 +21,7 @@ declare -A pakete=(
     ["code"]="Code ist ein von Microsoft entwickelter plattformübergreifender Texteditor, der auf dem Electron-Framework aufbaut."
     ["btop"]="Ressourcenmonitor, der die Nutzung und Statistiken für Prozessor, Speicher, Festplatten, Netzwerk und Prozesse anzeigt."
     ["cups"]="CUPS ist das standardbasierte, quelloffene Drucksystem"
+    ["fzf"]="fzf ist ein universeller Fuzzy-Finder für die Kommandozeile."
 )
 
 declare -A pakete_yay=(
