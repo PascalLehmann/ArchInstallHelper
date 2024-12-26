@@ -22,7 +22,6 @@ declare -A pakete=(
 
 declare -A pakete_yay=(
     ["waypaper"]=""
-    ["sddm-sugar-candy-git"]=""
     ["google-chrome"]=""
     ["getnf"]=""
 )

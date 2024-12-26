@@ -34,7 +34,13 @@ if gum confirm "Bist du sicher?"; then
       ;;
       "Was ist bereits installiert")
         echo -e "${gelb}Überprüfung der Programme:${reset}"
-        for paket in "${pakete[@]}"; do
+        for paket in "${!pakete_pre[@]}"; do
+          check_pakete "$paket"
+        done
+        for paket in "${!pakete[@]}"; do
+          check_pakete "$paket"
+        done
+        for paket in "${!pakete_yay[@]}"; do
           check_pakete "$paket"
         done
       ;;
@@ -47,7 +53,7 @@ if gum confirm "Bist du sicher?"; then
         install_yay
         for paket in "${!pakete_yay[@]}"; do
           echo -e "${lila}🔍 Überprüfe: $paket - ${pakete_yay[$paket]}${reset}"
-          installiere_paket "$paket"
+          installiere_paket_yay "$paket"
         done
       ;;
       "Info ueber die zu installirenden Pakete")

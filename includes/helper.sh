@@ -13,6 +13,19 @@ installiere_paket() {
   fi
 }
 
+installiere_paket_yay() {
+  if ! pacman -Q "$1" &>/dev/null; then
+    echo -e "${rot}✘ $1 ist nicht installiert. Installation wird gestartet...${reset}"
+    if yay -S --noconfirm "$1" &>/dev/null; then 
+      echo -e "${gruen}✔ $1 wurde erfolgreich installiert.${reset}"
+    else
+      echo -e "${rot}❌ Fehler beim Installieren von $1.${reset}"
+    fi
+  else
+    echo -e "${gruen}✔ $1 ist bereits installiert.${reset}"
+  fi
+}
+
 # Funktion, um zu prüfen, ob ein Programm installiert ist
 check_pakete() {
   if pacman -Q "$1" &>/dev/null; then
