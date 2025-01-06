@@ -22,6 +22,12 @@ declare -A pakete=(
     ["btop"]="Ressourcenmonitor, der die Nutzung und Statistiken für Prozessor, Speicher, Festplatten, Netzwerk und Prozesse anzeigt."
     ["cups"]="CUPS ist das standardbasierte, quelloffene Drucksystem"
     ["fzf"]="fzf ist ein universeller Fuzzy-Finder für die Kommandozeile."
+    ["brightnessctl"]="Lightweight brightness control tool"
+    ["pacman-contrib"]="Contributed scripts and tools for pacman systems"
+    ["power-profiles-daemon"]="Makes power profiles handling available over D-Bus"
+    ["bluez"]="Daemons for the bluetooth protocol stack"
+    ["bluez-utils"]="Development and debugging utilities for the bluetooth protocol stack"
+    ["blueman"]="A full featured Bluetooth manager."
 )
 
 declare -A pakete_yay=(
